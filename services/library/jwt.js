@@ -21,17 +21,19 @@ export function jwtGenToken(id) {
 }
 
 
-export async function jwtVerifyToken(token) {
+export function jwtVerifyToken(token) {
     const key = process.env.JWT_SECRET_KEY;
 
     if (!key ) 
     { throw new Error("JWT_SECRET_KEY is not defined in env file") }
 
+    console.log("tokrn", token);
+    
       try {
           const decode = jwt.verify(token, key);
           return decode;
       } catch (error) {
-          log(`Exception occurred at validation token ${error}`)
+          console.log(`Exception occurred at validation token ${error}`)
           throw new Error('Token validator failed');
         }
 }
