@@ -54,8 +54,6 @@ export const addprodutcsincartcontroller = async (req, res, next) => {
     const { productId, Quantity, size } = req?.body;
     const userID = req.userID;
 
-    console.log("usercart data", req?.body, userID);
-    
     if (!productId || !Quantity || !size) {
       res.status(502).json({
         success: false,
@@ -85,7 +83,10 @@ export const addprodutcsincartcontroller = async (req, res, next) => {
     } else {
       const updatecartitem = await usercartModel.updateOne(
         { userID, "products.productId": productId },
-        { $inc: { "products.$.Quantity": Quantity, "products.$.size": size } }
+        {
+          $inc: { "products.$.Quantity": Quantity },
+          $set: { "products.$.size": size },
+        }
       );
       if (updatecartitem.matchedCount === 0) {
         await usercartModel.updateOne(
@@ -107,17 +108,45 @@ export const addprodutcsincartcontroller = async (req, res, next) => {
   }
 };
 
+export const allcartproductscontroller = async (req, res, next) => {
+  try {
+    const userID = req?.userID;
+console.log();
+
+    if (!userID) {
+      res.status(401).json({ success: false, message: "userId not found" });
+    }
+    const cartProducts = await usercartModel.findOne({ userID }).lean(); // lean is use for reduce external data from mongoose side
+    if (!cartProducts) {
+      return res.status(404).json({
+        success: false,
+        message: "No items found in the cart",
+      });
+    }
+
+
+    const cartlistPromises= cartProducts?.products?.map(async (product)=>{
+      const singleProduct =await ProductModel.findById(product?.productId).lean();
+      return {...singleProduct, Quantity:product?.Quantity, size:product?.size}
+    })
+
+    const listofproducts= await Promise.all(cartlistPromises)
+
+    return res.status(200).json({success:true, message:"get all cart products", data:{listofproducts}})
+  } catch (error) {
+    console.log("error occurred while fetching cart list", error);
+  }
+};
+
 export const deletecartitemcontroller = async (req, res, next) => {
   try {
     const productId = req?.body?.productId;
     const userID = req.userID;
     if (!productId || !userID) {
-      return res
-        .status(501)
-        .json({
-          success: false,
-          message: "please provide productId or userID",
-        });
+      return res.status(501).json({
+        success: false,
+        message: "please provide productId or userID",
+      });
     }
 
     const deletecartitem = await usercartModel.updateOne(

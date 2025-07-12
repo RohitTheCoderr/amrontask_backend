@@ -11,8 +11,6 @@ export const createToken = (req, res, next) => {
     }
 
     const token = jwtGenToken(userID);
-
-    console.log("token", token);
     
     res
       .status(202)
@@ -34,21 +32,12 @@ export const createToken = (req, res, next) => {
 export const verifyToken = (req, res, next) => {
   try {
     const authHeader = req?.headers?.authorization;
-    console.log("header is", req?.headers);
-    console.log("header is 2222", req?.headers?.authorization);
-    
     if (authHeader && authHeader.startsWith("Bearer ")) {
       const token = authHeader.split(" ")[1];
-      console.log("before varified token is", token);
       
       const decodeToken= jwtVerifyToken(token);
-      console.log("decodetoken", decodeToken);
-      
       req.userID =  decodeToken?.userID
-      console.log(`Token verification ended.`, req.userID);
       if (req.userID) {
-        console.log("hello");
-        
         return next()
       }
       throw new Error("jwt token not verified")

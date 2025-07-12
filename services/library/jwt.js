@@ -11,8 +11,6 @@ export function jwtGenToken(id) {
   const payload = { userID: id };
   try {
     const token = jwt.sign(payload, key, options);
-    console.log("token in jwt", token);
-    
     return token;
   } catch (error) 
   {
@@ -27,8 +25,6 @@ export function jwtVerifyToken(token) {
     if (!key ) 
     { throw new Error("JWT_SECRET_KEY is not defined in env file") }
 
-    console.log("tokrn", token);
-    
       try {
           const decode = jwt.verify(token, key);
           return decode;
