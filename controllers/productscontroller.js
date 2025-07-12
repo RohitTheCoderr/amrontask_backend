@@ -111,8 +111,6 @@ export const addprodutcsincartcontroller = async (req, res, next) => {
 export const allcartproductscontroller = async (req, res, next) => {
   try {
     const userID = req?.userID;
-console.log();
-
     if (!userID) {
       res.status(401).json({ success: false, message: "userId not found" });
     }
@@ -123,7 +121,6 @@ console.log();
         message: "No items found in the cart",
       });
     }
-
 
     const cartlistPromises= cartProducts?.products?.map(async (product)=>{
       const singleProduct =await ProductModel.findById(product?.productId).lean();
