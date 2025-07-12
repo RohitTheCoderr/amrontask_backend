@@ -57,7 +57,7 @@ export const addprodutcsincartcontroller = async (req, res, next) => {
     if (!productId || !Quantity || !size) {
       res.status(502).json({
         success: false,
-        message: "please provide productId, size or proQuantity",
+        message: "please provide productId, size or Quantity",
       });
     }
 

@@ -37,13 +37,13 @@ export async function createUser(req, res, next) {
     
     if (newUser._id) {
       req.userID = newUser._id;
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: `User created successfully.`,
-          user: savedUser,
-        });
+      // res
+      //   .status(201)
+      //   .json({
+      //     success: true,
+      //     message: `User created successfully.`,
+      //     user: savedUser,
+      //   });
       return next();
     } else {
       return res
