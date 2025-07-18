@@ -5,6 +5,7 @@ import { addtocartroute } from "./useraccountRoutes/addtocartroute.js";
 import { deletefromcartroute } from "./useraccountRoutes/deletefromcartroute.js";
 import { getuserCartlistroute } from "./useraccountRoutes/getuserCartlistroute.js";
 import { orderRoute } from "./useraccountRoutes/placeorderroute.js";
+import { moreorderRoute } from "./useraccountRoutes/moreorderroute.js";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/getusercartlist" , getuserCartlistroute)
 router.use("/deletefromcart" , deletefromcartroute)
 
 router.use("/order" ,orderRoute  )
+router.use("/moreorder" ,moreorderRoute  )
 
 export default router
