@@ -3,55 +3,36 @@ import {createHashedPassword,verifiedhashedpassword,} from "../services/library/
 
 export async function createUser(req, res, next) {
   try {
-    console.log("request", req.body);
-    
     let { firstname, lastname, email, password } = req.body;
 
-    if (!email || !firstname) {
+    if (!email || !firstname || !password) {
       return res
         .status(400)
-        .json({ message: "Firstname and Email are required" });
+        .json({ message: "Firstname, Email and Password are required"});
     }
     let user;
     if (email) {
       user = await userModel.findOne({ email: email });
     }
+
     if (user) {
       return res
         .status(400)
-        .json({ success: false, message: "user already exist." });
+        .json({ success: false, message: "User already exist." });
     }
-
-    console.log("beofer password hashed", user);
-    console.log("beofer password hashed", req.body);
-    
-     
     password = await createHashedPassword(password);
-
-    console.log("after hasged", password);
-    
     const newUser = new userModel({ firstname, lastname, email, password });
     const savedUser = await newUser.save();
 
-    console.log("newUser", savedUser);
-    
-    if (newUser._id) {
-      req.userID = newUser._id;
-      // res
-      //   .status(201)
-      //   .json({
-      //     success: true,
-      //     message: `User created successfully.`,
-      //     user: savedUser,
-      //   });
+    if (savedUser._id) {
+      req.userID = savedUser._id;
       return next();
     } else {
       return res
         .status(500)
-        .json({ success: false, message: "user not created" });
+        .json({ success: false, message: "User not created" });
     }
   } catch (error) {
-    console.error("Error creating user:", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 }
@@ -63,7 +44,7 @@ export async function getUsers(req, res, next) {
     if ((!email, !password)) {
       return res
         .status(400)
-        .json({ success: false, message: "password and Email are required" });
+        .json({ success: false, message: "Password and Email are required" });
     }
     let user;
     if (email) {

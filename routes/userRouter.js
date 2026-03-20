@@ -6,6 +6,7 @@ import { deletefromcartroute } from "./useraccountRoutes/deletefromcartroute.js"
 import { getuserCartlistroute } from "./useraccountRoutes/getuserCartlistroute.js";
 import { orderRoute } from "./useraccountRoutes/placeorderroute.js";
 import { moreorderRoute } from "./useraccountRoutes/moreorderroute.js";
+import { clearcartroute } from "./useraccountRoutes/clearcartroute.js";
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.use("/login" , loginroute)
 router.use("/addtocart" , addtocartroute)
 router.use("/getusercartlist" , getuserCartlistroute)
 router.use("/deletefromcart" , deletefromcartroute)
+router.use("/clearcart" , clearcartroute)
 
 router.use("/order" ,orderRoute  )
 router.use("/moreorder" ,moreorderRoute  )

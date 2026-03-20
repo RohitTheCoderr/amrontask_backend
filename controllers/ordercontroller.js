@@ -8,10 +8,8 @@ export const placedOrderController = async (req, res, next) => {
   try {
     const userID = req.userID;
 
-    // console.log("req.body while order place", req.body);
     const orderDetail = await orderValidator.validateAsync(req.body);
 
-    // console.log("orderDetail while order place", orderDetail);
     const existingOrder = await orderModel.findOne({ userID });
 
     if (!existingOrder) {

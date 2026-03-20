@@ -15,8 +15,9 @@ app.use(
     // origin: 'http://localhost:3000', // allow frontend
     origin: [
       // allow frontend
-      "https://mynextjsproject.netlify.app",
       "http://localhost:3000",
+     " http://localhost:3001",
+      "https://mynextjsproject.netlify.app",
     ],
     credentials: true,
   })

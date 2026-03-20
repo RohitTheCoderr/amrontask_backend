@@ -27,8 +27,6 @@ export const uploadProductsController = async (req, res, next) => {
     // const product = await productValidator.validateAsync({ images, ...details });
 
     await ProductModel.create(product);
-    console.log(`Product details saved`);
-
     res
       .status(200)
       .json({ success: true, message: "Products uploaded.", data: {} });
@@ -260,6 +258,40 @@ export const deletecartitemcontroller = async (req, res, next) => {
       .json({ success: true, message: "cart product deleted successefully" });
   } catch (error) {
     console.log("error occurred while deleting cartitem", error);
+    next(error);
+  }
+};
+
+
+export const clearCartAfterOrderController = async (req, res, next) => {
+  try {
+    const userID = req.userID;
+
+    if (!userID) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    const result = await usercartModel.updateOne(
+      { userID },
+      { $set: { products: [] } }
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No cart found to clear or already empty",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Cart cleared successfully after order",
+    });
+  } catch (error) {
+    console.log("Error while clearing cart:", error);
     next(error);
   }
 };
